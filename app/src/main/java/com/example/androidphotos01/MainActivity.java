@@ -2,6 +2,8 @@ package com.example.androidphotos01;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.DialogFragment;
+
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.DataSetObserver;
@@ -9,9 +11,11 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.text.InputType;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
@@ -66,7 +70,45 @@ public class MainActivity extends AppCompatActivity {
         tag2name = (TextView) findViewById(R.id.tag2Name);
         tag1Name = (Spinner) findViewById(R.id.tag1NameChoices);
         tag2Name = (Spinner) findViewById(R.id.tag2NameChoices);
+
+
+        tag1Name.setOnTouchListener(new View.OnTouchListener() {
+            public boolean onTouch(View v, MotionEvent event) {
+                System.out.println("clicked the spinner choice box");
+                InputMethodManager inputManager = (InputMethodManager)
+                        getSystemService(Context.INPUT_METHOD_SERVICE);
+
+                inputManager.hideSoftInputFromWindow(
+                        (null == getCurrentFocus()) ? null : getCurrentFocus().getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
+                return false;
+            }
+        });
+        tag2Name.setOnTouchListener(new View.OnTouchListener() {
+            public boolean onTouch(View v, MotionEvent event) {
+                System.out.println("clicked the spinner choice box");
+                InputMethodManager inputManager = (InputMethodManager)
+                        getSystemService(Context.INPUT_METHOD_SERVICE);
+
+                inputManager.hideSoftInputFromWindow(
+                        (null == getCurrentFocus()) ? null : getCurrentFocus().getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
+                return false;
+            }
+        });
+
         conj = (Spinner) findViewById(R.id.conjChoices);
+
+        conj.setOnTouchListener(new View.OnTouchListener() {
+            public boolean onTouch(View v, MotionEvent event) {
+                System.out.println("clicked the spinner choice box");
+                InputMethodManager inputManager = (InputMethodManager)
+                        getSystemService(Context.INPUT_METHOD_SERVICE);
+
+                inputManager.hideSoftInputFromWindow(
+                        (null == getCurrentFocus()) ? null : getCurrentFocus().getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
+                return false;
+            }
+        });
+
         tag1Value = (EditText) findViewById(R.id.tag1Value);
         tag2Value = (EditText) findViewById(R.id.tag2Value);
         tagNameChoices.add("location");
@@ -293,5 +335,14 @@ public class MainActivity extends AppCompatActivity {
             }
         });
         return builder;
+    }
+
+    public void tag1Clicked(View view){
+        System.out.println("clicked the spinner choice box");
+        InputMethodManager inputManager = (InputMethodManager)
+                getSystemService(Context.INPUT_METHOD_SERVICE);
+
+        inputManager.hideSoftInputFromWindow(
+                (null == getCurrentFocus()) ? null : getCurrentFocus().getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
     }
 }
