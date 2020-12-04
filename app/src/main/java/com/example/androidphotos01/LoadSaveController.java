@@ -1,9 +1,12 @@
 package com.example.androidphotos01;
 
+import android.app.Activity;
+
 import com.example.androidphotos01.model.Album;
 import com.example.androidphotos01.model.User;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -16,7 +19,7 @@ import java.util.ArrayList;
 //Class for serializing
 public class LoadSaveController {
     //file path serialize to
-    public static final String filePath = "/src/main/java/com.example.androidphotos01/user.dat";
+    public static final String filePath = "/data/user/0/com.example.androidphotos01/files/user.dat";
 
     private static User user = new User();
 
@@ -36,16 +39,34 @@ public class LoadSaveController {
             e1.printStackTrace();
         }
     }
+    public static void saveUser(Activity mainActivity){
+        ObjectOutputStream oos;
+        try {
+            File file = mainActivity.getFilesDir();
+            System.out.println("testing file path of mA: " + file.toString());
+            oos = new ObjectOutputStream(new FileOutputStream(filePath));
+            oos.writeObject(user);
+            oos.close();
+        } catch (FileNotFoundException e1) {
+            e1.printStackTrace();
+        } catch (IOException e1) {
+            e1.printStackTrace();
+        }
+    }
+
     //Checks if user.dat is empty
     public static boolean isFileEmpty(){
+
+        System.out.println("current dir: " + System.getProperty(filePath));
+
         try {
             BufferedReader br = new BufferedReader(new FileReader(filePath));
             try {
                 if(br.readLine() == null){
-                    return false;
+                    return true;
                 }
                 else{
-                    return true;
+                    return false;
                 }
             } catch (IOException e) {
                 e.printStackTrace();

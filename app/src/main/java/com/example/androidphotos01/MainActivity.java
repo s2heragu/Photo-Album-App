@@ -337,12 +337,5 @@ public class MainActivity extends AppCompatActivity {
         return builder;
     }
 
-    public void tag1Clicked(View view){
-        System.out.println("clicked the spinner choice box");
-        InputMethodManager inputManager = (InputMethodManager)
-                getSystemService(Context.INPUT_METHOD_SERVICE);
 
-        inputManager.hideSoftInputFromWindow(
-                (null == getCurrentFocus()) ? null : getCurrentFocus().getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
-    }
 }
