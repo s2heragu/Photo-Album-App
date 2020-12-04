@@ -27,24 +27,12 @@ public class LoadSaveController {
         return user;
     }
 
-    public static void saveUser(){
-        ObjectOutputStream oos;
-        try {
-            oos = new ObjectOutputStream(new FileOutputStream(filePath));
-            oos.writeObject(user);
-            oos.close();
-        } catch (FileNotFoundException e1) {
-            e1.printStackTrace();
-        } catch (IOException e1) {
-            e1.printStackTrace();
-        }
-    }
     public static void saveUser(Activity mainActivity){
         ObjectOutputStream oos;
         try {
-            File file = mainActivity.getFilesDir();
+            File file = new File(mainActivity.getFilesDir(), "user.dat");
             System.out.println("testing file path of mA: " + file.toString());
-            oos = new ObjectOutputStream(new FileOutputStream(filePath));
+            oos = new ObjectOutputStream(new FileOutputStream(file));
             oos.writeObject(user);
             oos.close();
         } catch (FileNotFoundException e1) {
@@ -55,12 +43,12 @@ public class LoadSaveController {
     }
 
     //Checks if user.dat is empty
-    public static boolean isFileEmpty(){
+    public static boolean isFileEmpty(Activity activity){
 
-        System.out.println("current dir: " + System.getProperty(filePath));
 
         try {
-            BufferedReader br = new BufferedReader(new FileReader(filePath));
+            File file = new File(activity.getFilesDir(), "user.dat");
+            BufferedReader br = new BufferedReader(new FileReader(file));
             try {
                 if(br.readLine() == null){
                     return true;
@@ -77,13 +65,14 @@ public class LoadSaveController {
         return false;
     }
     //Deserialize user to get list of albums
-    public static void getUser(){
+    public static void getUser(Activity activity){
         try {
             //Just use the new user already implemented
-            if(isFileEmpty()){
+            if(isFileEmpty(activity)){
                 return;
             }
-            ObjectInputStream ois = new ObjectInputStream(new FileInputStream(filePath));
+            File file = new File(activity.getFilesDir(), "user.dat");
+            ObjectInputStream ois = new ObjectInputStream(new FileInputStream(file));
             try {
                 user = (User) ois.readObject();
             } catch (ClassNotFoundException e) {

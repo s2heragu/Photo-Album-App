@@ -159,13 +159,13 @@ public class PhotoListScreenActivity extends AppCompatActivity {
 
     public void onStop(){
         super.onStop();
-        LoadSaveController.saveUser();
+        LoadSaveController.saveUser(this);
         System.out.println("PLS Stop");
     }
 
     public void onDestroy(){
         super.onDestroy();
-        LoadSaveController.saveUser();
+        LoadSaveController.saveUser(this);
         System.out.println("PLS Destroy");
     }
 }

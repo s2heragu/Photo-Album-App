@@ -72,13 +72,13 @@ public class SearchedPhotosActivity extends AppCompatActivity {
 
     public void onDestroy(){
         super.onDestroy();
-        LoadSaveController.saveUser();
+        LoadSaveController.saveUser(this);
         System.out.println("SP Destroy");
     }
 
     public void onStop(){
         super.onStop();
-        LoadSaveController.saveUser();
+        LoadSaveController.saveUser(this);
         System.out.println("SP Stop");
     }
 }

@@ -61,8 +61,8 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.album_list_screen);
 
-        if(!LoadSaveController.isFileEmpty()){
-            LoadSaveController.getUser();
+        if(!LoadSaveController.isFileEmpty(this)){
+            LoadSaveController.getUser(this);
         }
 
         user = LoadSaveController.user();
@@ -240,13 +240,13 @@ public class MainActivity extends AppCompatActivity {
 
     public void onDestroy(){
         super.onDestroy();
-        LoadSaveController.saveUser();
+        LoadSaveController.saveUser(this);
         System.out.println("MA Destroy");
     }
 
     public void onStop(){
         super.onStop();
-        LoadSaveController.saveUser();
+        LoadSaveController.saveUser(this);
         System.out.println("MA Stop");
     }
 

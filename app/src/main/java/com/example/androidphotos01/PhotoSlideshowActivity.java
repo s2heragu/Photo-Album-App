@@ -270,13 +270,13 @@ public class PhotoSlideshowActivity extends AppCompatActivity {
 
     public void onDestroy(){
         super.onDestroy();
-        LoadSaveController.saveUser();
+        LoadSaveController.saveUser(this);
         System.out.println("PS Destroy");
     }
 
     public void onStop(){
         super.onStop();
-        LoadSaveController.saveUser();
+        LoadSaveController.saveUser(this);
         System.out.println("PS Stop");
     }
 }
