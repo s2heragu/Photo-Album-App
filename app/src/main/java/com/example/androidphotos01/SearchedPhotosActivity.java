@@ -6,6 +6,7 @@ import android.app.ActionBar;
 import android.app.AlertDialog;
 import android.content.Intent;
 import android.database.Cursor;
+import android.database.DataSetObserver;
 import android.graphics.Bitmap;
 import android.graphics.ImageDecoder;
 import android.net.Uri;
@@ -24,7 +25,10 @@ import com.example.androidphotos01.model.Album;
 import com.example.androidphotos01.model.Photo;
 import com.example.androidphotos01.model.User;
 
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.List;
 public class SearchedPhotosActivity extends AppCompatActivity {
@@ -70,7 +74,22 @@ public class SearchedPhotosActivity extends AppCompatActivity {
         return true;
     }
 
-    public void onDestroy(){
+    private void SaveUser(){
+        String pathToAppFolder = getExternalFilesDir(null).getAbsolutePath();
+        String filePath = pathToAppFolder + File.separator + "user.dat";
+        try {
+
+            ObjectOutputStream os = new ObjectOutputStream(new FileOutputStream(filePath));
+            os.writeObject(LoadSaveController.user());
+            os.flush();
+            os.close();
+        }
+        catch (Exception e) {
+            System.out.println("OOOOOOOOOOOOOOOOF");
+        }
+    }
+
+    /*public void onDestroy(){
         super.onDestroy();
         LoadSaveController.saveUser(this);
         System.out.println("SP Destroy");
@@ -80,6 +99,6 @@ public class SearchedPhotosActivity extends AppCompatActivity {
         super.onStop();
         LoadSaveController.saveUser(this);
         System.out.println("SP Stop");
-    }
+    }*/
 }
 

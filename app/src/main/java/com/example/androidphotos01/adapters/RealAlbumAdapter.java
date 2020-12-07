@@ -11,6 +11,7 @@ import android.widget.TextView;
 import com.example.androidphotos01.R;
 import com.example.androidphotos01.model.User;
 import com.example.androidphotos01.model.Album;
+import com.example.androidphotos01.LoadSaveController;
 
 import java.util.List;
 

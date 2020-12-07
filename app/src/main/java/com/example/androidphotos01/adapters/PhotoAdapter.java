@@ -2,24 +2,39 @@ package com.example.androidphotos01.adapters;
 
 import android.app.AlertDialog;
 import android.content.Context;
+import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.ImageDecoder;
+import android.media.MediaScannerConnection;
 import android.net.Uri;
+import android.os.Environment;
+import android.util.Size;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 
 import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
 
+import com.example.androidphotos01.LoadSaveController;
+import com.example.androidphotos01.PhotoSlideshowActivity;
 import com.example.androidphotos01.R;
 import com.example.androidphotos01.model.Album;
 import com.example.androidphotos01.model.Photo;
 
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.List;
+
+import static androidx.core.content.FileProvider.getUriForFile;
 
 
 public class PhotoAdapter extends ArrayAdapter<Photo> {
@@ -51,57 +66,73 @@ public class PhotoAdapter extends ArrayAdapter<Photo> {
             v = vi.inflate(resourceLayout, null);
         }
 
-        //get photo
-        Photo p = (Photo) getItem(position);
-        String fileString = p.fileDir();
-        Uri uri = Uri.parse(fileString);
-        Bitmap bitmapImage = this.loadFromUri(uri);
-        ImageView thumbnail = null;
+        //Getting photo and thumbnail references
+        ImageView thumb = v.findViewById(R.id.thumbnail);
+        //Photo p = (Photo) getItem(position);
 
-        System.out.println("trying to get view");
-
-        if(bitmapImage != null){
-            System.out.println("got bit map image");
-            thumbnail = (ImageView) v.findViewById(R.id.thumbnail);
-            System.out.println(thumbnail.toString());
-            thumbnail.setImageBitmap(bitmapImage);
-        }
-        else{
-            System.out.println("did not get bit map image");
-        }
-
-        //Get image here and do set bitmap image, return to grid view to display
+        //Retrieve view's relativeLayout
+        RelativeLayout rL = (RelativeLayout)v.findViewById(R.id.imgLayout);
+        String state = Environment.getExternalStorageState();
+        if(Environment.MEDIA_MOUNTED.equals(state)){
+            if(checkPermission()){
+                //get photo
+                Photo p = (Photo) getItem(position);
+                String fileString = p.fileDir();
 
 
-        //Do this in the activity?
-        /*
-        if(thumbnail != null){
-            thumbnail.setOnClickListener(new View.OnClickListener(){
-                @Override
-                public void onClick(View v){
-                    AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
-                    builder.setTitle("Choose Action");
-                    builder.setMessage("Display or Delete this photo");
-                    builder.setPositiveButton("Display", (dialog, id) -> {
 
-                    });
-                    builder.setNegativeButton("Delete", (dialog, id) -> {
+                Uri uri = Uri.parse(fileString);
+                Bitmap bitmapImage = this.loadFromUri(uri);
+                ImageView thumbnail = null;
 
-                    });
-                    builder.setNegativeButton("Cancel", (dialog, id) -> {
-                        dialog.cancel();
-                        return;
-                    });
-                    builder.show();
+                System.out.println("adding photo printing URI STrING");
+                System.out.println("THE GRIDVIEW URI STRING: " + uri.toString());
+
+                System.out.println("trying to get view");
+
+
+                if(bitmapImage != null){
+                    System.out.println("got bit map image");
+                    thumbnail = (ImageView) v.findViewById(R.id.thumbnail);
+                    System.out.println(thumbnail.toString());
+                    thumbnail.setImageBitmap(bitmapImage);
                 }
-            });
+                else{
+                    System.out.println("did not get bit map image");
+                }
+            }
         }
-        */
 
+        //Using viewTreeObserver to know when layout is generated: avoids NullPointer
+        /*ViewTreeObserver vto = rL.getViewTreeObserver();
+        vto.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+            @Override
+            public void onGlobalLayout() {
+                rL.getViewTreeObserver().removeGlobalOnLayoutListener(this);
+                int width  = rL.getMeasuredWidth();
+                int height = rL.getMeasuredHeight();
+                try {
+                    //Note that thumbnail is as big as relative layout.
+                    thumb.setImageBitmap(mContext.getContentResolver().loadThumbnail(Uri.parse(p.fileDir()),new Size(width,height),null));
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
 
+            }
+        });*/
 
         return v;
     }
+
+    private boolean checkPermission() {
+        int result = ContextCompat.checkSelfPermission(this.mContext, android.Manifest.permission.READ_EXTERNAL_STORAGE);
+        if (result == PackageManager.PERMISSION_GRANTED) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
     private Bitmap loadFromUri(Uri photoUri) {
         Bitmap image = null;
         try {

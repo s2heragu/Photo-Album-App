@@ -2,22 +2,32 @@ package com.example.androidphotos01;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.DialogFragment;
 
 import android.content.Intent;
+import android.database.DataSetObserver;
 import android.graphics.Bitmap;
 import android.graphics.ImageDecoder;
+import android.media.MediaScannerConnection;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.text.InputType;
+import android.util.Size;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewTreeObserver;
 import android.widget.BaseAdapter;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import android.graphics.BitmapFactory;
+
+import com.example.androidphotos01.adapters.PhotoAdapter;
 import com.example.androidphotos01.adapters.RealAlbumAdapter;
 import com.example.androidphotos01.adapters.TagAdapter;
 import com.example.androidphotos01.dialogs.ErrorDialogFragment;
@@ -26,9 +36,13 @@ import com.example.androidphotos01.model.Photo;
 import com.example.androidphotos01.model.Tag;
 import com.example.androidphotos01.model.User;
 
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.List;
+import java.io.File;
 
 public class PhotoSlideshowActivity extends AppCompatActivity {
 
@@ -92,16 +106,48 @@ public class PhotoSlideshowActivity extends AppCompatActivity {
     }
     //Sets photo and its tags
     private void setImage(Photo p){
+
+        SaveUser();
+
+        //Retrieve activity's constraint layout
+        ConstraintLayout cL = (ConstraintLayout)findViewById(R.id.slideLayout);
+
+        //Using viewTreeObserver to know when layout is generated: avoids NullPointer
+        /*ViewTreeObserver vto = cL.getViewTreeObserver();
+        vto.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+            @Override
+            public void onGlobalLayout() {
+                cL.getViewTreeObserver().removeGlobalOnLayoutListener(this);
+                //Need to specify photoDisplay width
+                int width  = PhotoSlideshowActivity.this.photoDisplay.getMeasuredWidth();
+                int height = PhotoSlideshowActivity.this.photoDisplay.getMeasuredWidth();
+                try {
+                    PhotoSlideshowActivity.this.photoDisplay.setImageBitmap(PhotoSlideshowActivity.this.getContentResolver().loadThumbnail(Uri.parse(p.fileDir()),new Size(width,height),null));
+                } catch (IOException e) {
+                    System.out.println("oops, i did it again");
+                    e.printStackTrace();
+                }
+            }
+        });*/
+
         String fileString = p.fileDir();
         Uri uri = Uri.parse(fileString);
         Bitmap bitmapImage = this.loadFromUri(uri);
         this.photoDisplay.setImageBitmap(bitmapImage);
+
         this.tags = p.getTags();
         //Set tag list view as well
         this.tagListView.setAdapter(new TagAdapter(this,
                 R.layout.view_album_list,
                 this.tags,
                 p));
+        ((BaseAdapter)tagListView.getAdapter()).registerDataSetObserver(new DataSetObserver(){
+            @Override
+            public void onChanged()
+            {
+                PhotoSlideshowActivity.this.SaveUser();
+            }
+        });
     }
     private Bitmap loadFromUri(Uri photoUri) {
         Bitmap image = null;
@@ -268,7 +314,22 @@ public class PhotoSlideshowActivity extends AppCompatActivity {
         return true;
     }
 
-    public void onDestroy(){
+    private void SaveUser(){
+        String pathToAppFolder = getExternalFilesDir(null).getAbsolutePath();
+        String filePath = pathToAppFolder + File.separator + "user.dat";
+        try {
+
+            ObjectOutputStream os = new ObjectOutputStream(new FileOutputStream(filePath));
+            os.writeObject(LoadSaveController.user());
+            os.flush();
+            os.close();
+        }
+        catch (Exception e) {
+            System.out.println("OOOOOOOOOOOOOOOOF");
+        }
+    }
+
+    /*public void onDestroy(){
         super.onDestroy();
         LoadSaveController.saveUser(this);
         System.out.println("PS Destroy");
@@ -278,5 +339,5 @@ public class PhotoSlideshowActivity extends AppCompatActivity {
         super.onStop();
         LoadSaveController.saveUser(this);
         System.out.println("PS Stop");
-    }
+    }*/
 }

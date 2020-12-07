@@ -1,7 +1,13 @@
 package com.example.androidphotos01.model;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.util.Base64;
+
 import com.example.androidphotos01.LoadSaveController;
 
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -27,6 +33,7 @@ public class Photo implements Comparable<Photo>, Serializable {
     }
 
 
+
     //GETTERS
 
     //Returns file name
@@ -36,6 +43,13 @@ public class Photo implements Comparable<Photo>, Serializable {
     //Returns file path
     public String fileDir(){
         return this.fileDir;
+    }
+
+    //SETTER
+
+    //Sets file directory
+    public void setFileDir(String uri){
+        this.fileDir = uri;
     }
 
 

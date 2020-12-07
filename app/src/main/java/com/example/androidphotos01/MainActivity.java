@@ -1,11 +1,13 @@
 package com.example.androidphotos01;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.DialogFragment;
 
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.database.DataSetObserver;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -26,6 +28,7 @@ import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.Switch;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.androidphotos01.dialogs.ErrorDialogFragment;
 import com.example.androidphotos01.dialogs.TextInputDialogFragment;
@@ -34,6 +37,11 @@ import com.example.androidphotos01.model.Tag;
 import com.example.androidphotos01.model.User;
 import com.example.androidphotos01.adapters.RealAlbumAdapter;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 
 //ALBUM LIST SCREEN
@@ -61,8 +69,21 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.album_list_screen);
 
-        if(!LoadSaveController.isFileEmpty(this)){
-            LoadSaveController.getUser(this);
+        if (ActivityCompat.shouldShowRequestPermissionRationale(this, android.Manifest.permission.READ_EXTERNAL_STORAGE)) {
+            Toast.makeText(this, "Write External Storage permission allows us to read  files. Please allow this permission in App Settings.", Toast.LENGTH_LONG).show();
+        } else {
+            ActivityCompat.requestPermissions(this, new String[] {android.Manifest.permission.READ_EXTERNAL_STORAGE}, 100);
+        }
+
+        try {
+            String pathToAppFolder = getExternalFilesDir(null).getAbsolutePath();
+            String filePath = pathToAppFolder + File.separator + "user.dat";
+            ObjectInputStream in = new ObjectInputStream(new FileInputStream(filePath));
+            User toWrite = (User)in.readObject();
+            LoadSaveController.setUser(toWrite);
+            in.close();
+        } catch (Exception e) {
+            System.out.println("user doesn't exist");
         }
 
         user = LoadSaveController.user();
@@ -162,7 +183,14 @@ public class MainActivity extends AppCompatActivity {
 
         listView = (ListView) findViewById(R.id.album_list);
         listView.setAdapter(new RealAlbumAdapter(this, R.layout.view_album_list, user.albums(),user));
-
+        ((BaseAdapter)listView.getAdapter()).registerDataSetObserver(new DataSetObserver(){
+            @Override
+            public void onChanged()
+            {
+                //LoadSaveController.saveUser(MainActivity.this);
+                MainActivity.this.SaveUser();
+            }
+        });
         listView.setOnItemClickListener(
                 (AdapterView<?> parent, View view, int position, long id) -> {
                     AlertDialog.Builder builder = new AlertDialog.Builder(this);
@@ -240,15 +268,15 @@ public class MainActivity extends AppCompatActivity {
 
     public void onDestroy(){
         super.onDestroy();
-        LoadSaveController.saveUser(this);
+        SaveUser();
         System.out.println("MA Destroy");
     }
 
-    public void onStop(){
+    /*public void onStop(){
         super.onStop();
         LoadSaveController.saveUser(this);
         System.out.println("MA Stop");
-    }
+    }*/
 
     private AlertDialog.Builder albumName(int position, String title, boolean add){
         AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
@@ -335,6 +363,34 @@ public class MainActivity extends AppCompatActivity {
             }
         });
         return builder;
+    }
+
+    private void SaveUser(){
+        String pathToAppFolder = getExternalFilesDir(null).getAbsolutePath();
+        String filePath = pathToAppFolder + File.separator + "user.dat";
+        try {
+
+            ObjectOutputStream os = new ObjectOutputStream(new FileOutputStream(filePath));
+            os.writeObject(LoadSaveController.user());
+            os.flush();
+            os.close();
+        }
+        catch (Exception e) {
+            System.out.println("OOOOOOOOOOOOOOOOF");
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
+        switch (requestCode) {
+            case 100:
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED)  {
+                    Log.e("value", "Permission Granted, Now you can use local drive .");
+                } else {
+                    Log.e("value", "Permission Denied, You cannot use local drive .");
+                }
+                break;
+        }
     }
 
 
