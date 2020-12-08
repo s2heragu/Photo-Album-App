@@ -68,9 +68,9 @@ public class LoadSaveController {
 
     public static void saveUser(){
         try {
-            BufferedOutputStream bos = new BufferedOutputStream(new FileOutputStream(LoadSaveController.path()));
+            BufferedOutputStream bos = new BufferedOutputStream(new FileOutputStream(path));
             ObjectOutputStream os = new ObjectOutputStream(bos);
-            os.writeObject(LoadSaveController.user());
+            os.writeObject(user);
             os.flush();
             os.close();
         }
@@ -81,10 +81,6 @@ public class LoadSaveController {
 
     //Checks if user.dat is empty
     public static void isFileEmpty(Activity activity){
-        if(path.isEmpty()){
-            b = true;
-            return;
-        }
         try {
             File file = new File(activity.getFilesDir(), "user.dat");
             BufferedReader br = new BufferedReader(new FileReader(file));

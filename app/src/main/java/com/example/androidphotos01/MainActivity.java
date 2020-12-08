@@ -84,16 +84,18 @@ public class MainActivity extends AppCompatActivity {
         if(!LoadSaveController.started()){
             LoadSaveController.isFileEmpty(this);
             if(!LoadSaveController.started()){
+                User toWrite = new User();
                 try {
-                    ObjectInputStream in = new ObjectInputStream(new FileInputStream(filePath));
-                    User toWrite = (User)in.readObject();
-                    LoadSaveController.setUser(toWrite);
+                    ObjectInputStream in = new ObjectInputStream(new FileInputStream(LoadSaveController.path()));
+                    toWrite = (User)in.readObject();
                     in.close();
+                    LoadSaveController.setUser(toWrite);
                 } catch (Exception e) {
                     System.out.println("user doesn't exist");
                 }
                 LoadSaveController.start();
             }
+            LoadSaveController.start();
         }
 
         user = LoadSaveController.user();
@@ -374,6 +376,5 @@ public class MainActivity extends AppCompatActivity {
                 break;
         }
     }
-
 
 }
