@@ -59,7 +59,7 @@ public class SearchedPhotosActivity extends AppCompatActivity {
                     bundle.putInt("albumIndex", -1);
                     bundle.putInt("photoIndex", position);
 
-                    Intent intent = new Intent(this, PhotoSlideshowActivity.class);
+                    Intent intent = new Intent(SearchedPhotosActivity.this, PhotoSlideshowActivity.class);
                     intent.putExtras(bundle);
 
                     startActivity(intent);

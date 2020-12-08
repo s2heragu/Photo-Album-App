@@ -214,7 +214,7 @@ public class MainActivity extends AppCompatActivity {
                         Bundle bundle = new Bundle();
                         bundle.putInt("index", position);
 
-                        Intent intent = new Intent(this, PhotoListScreenActivity.class);
+                        Intent intent = new Intent(MainActivity.this, PhotoListScreenActivity.class);
                         intent.putExtras(bundle);
 
                         startActivity(intent);
