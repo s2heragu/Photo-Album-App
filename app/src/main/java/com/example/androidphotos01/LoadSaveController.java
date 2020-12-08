@@ -37,9 +37,9 @@ public class LoadSaveController {
     //file path serialize to
     private static boolean b = false;
 
-    private static User user = new User();
+    private static String path = "/storage/emulated/0/Android/data/com.example.androidphotos01/files/user.dat";
 
-    private static String path = "";
+    private static User user = new User();
 
     public static User user(){
         return user;
@@ -55,6 +55,10 @@ public class LoadSaveController {
 
     public static void start(){
         b = true;
+    }
+
+    public static String path(){
+        return path;
     }
 
     public static void saveUser(Activity mainActivity){

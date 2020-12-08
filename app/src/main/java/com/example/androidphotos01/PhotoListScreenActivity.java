@@ -33,6 +33,7 @@ import com.example.androidphotos01.model.Album;
 import com.example.androidphotos01.model.Photo;
 import com.example.androidphotos01.model.User;
 
+import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -170,28 +171,34 @@ public class PhotoListScreenActivity extends AppCompatActivity {
                 return;
             }
 
-            //Initializing file for scanning
-            File f = new File(newPhoto.fileName());
+            Photo p = this.album.get(Int);
             ((BaseAdapter) photoGridView.getAdapter()).notifyDataSetChanged();
+            if(p.numAlbums()>1){
+              SaveUser();
+            }
+            else{
+                //Initializing file for scanning
+                File f = new File(newPhoto.fileName());
 
-            //Scanning for photo using filePath: this allows us to construct desired Uri
-            MediaScannerConnection.scanFile(this,
-                    new String[] { f.getAbsolutePath() }, null,
-                    new MediaScannerConnection.OnScanCompletedListener() {
-                        @Override
-                        public void onScanCompleted(String path, Uri uri) {
+                //Scanning for photo using filePath: this allows us to construct desired Uri
+                MediaScannerConnection.scanFile(this,
+                        new String[] { f.getAbsolutePath() }, null,
+                        new MediaScannerConnection.OnScanCompletedListener() {
+                            @Override
+                            public void onScanCompleted(String path, Uri uri) {
 
-                            //Hardcoding desired uri: generated uri gives us different path
-                            String content = "content://media/external/images/media";
-                            String initUriPath = uri.toString();
-                            content += initUriPath.substring(initUriPath.lastIndexOf("/"));
+                                //Hardcoding desired uri: generated uri gives us different path
+                                String content = "content://media/external/images/media";
+                                String initUriPath = uri.toString();
+                                content += initUriPath.substring(initUriPath.lastIndexOf("/"));
 
-                            //Updating desired uri for photo: uri remains constant so that we don't need to scan for this photo again
-                            newPhoto.setFileDir(content);
-                            PhotoListScreenActivity.this.SaveUser();
+                                //Updating desired uri for photo: uri remains constant so that we don't need to scan for this photo again
+                                newPhoto.setFileDir(content);
+                                PhotoListScreenActivity.this.SaveUser();
 
-                        }
-                    });
+                            }
+                        });
+            }
 
             //Wait for the MediaScannerConnection thread to finish running
             /*Handler handler = new Handler(Looper.getMainLooper());
@@ -217,11 +224,10 @@ public class PhotoListScreenActivity extends AppCompatActivity {
     }
 
     private void SaveUser(){
-        String pathToAppFolder = getExternalFilesDir(null).getAbsolutePath();
-        String filePath = pathToAppFolder + File.separator + "user.dat";
         try {
 
-            ObjectOutputStream os = new ObjectOutputStream(new FileOutputStream(filePath));
+            BufferedOutputStream bos = new BufferedOutputStream(new FileOutputStream(LoadSaveController.path()));
+            ObjectOutputStream os = new ObjectOutputStream(bos);
             os.writeObject(LoadSaveController.user());
             os.flush();
             os.close();

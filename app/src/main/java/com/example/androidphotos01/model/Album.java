@@ -59,6 +59,9 @@ public class Album implements Comparable<Album>, Serializable {
         return this.photos.remove(index);
     }
 
+    public Photo getPhoto(int index){
+        return this.photos.get(index);
+    }
 
 
     //MISC

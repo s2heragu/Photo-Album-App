@@ -25,6 +25,7 @@ import com.example.androidphotos01.model.Album;
 import com.example.androidphotos01.model.Photo;
 import com.example.androidphotos01.model.User;
 
+import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -75,11 +76,10 @@ public class SearchedPhotosActivity extends AppCompatActivity {
     }
 
     private void SaveUser(){
-        String pathToAppFolder = getExternalFilesDir(null).getAbsolutePath();
-        String filePath = pathToAppFolder + File.separator + "user.dat";
         try {
 
-            ObjectOutputStream os = new ObjectOutputStream(new FileOutputStream(filePath));
+            BufferedOutputStream bos = new BufferedOutputStream(new FileOutputStream(LoadSaveController.path()));
+            ObjectOutputStream os = new ObjectOutputStream(bos);
             os.writeObject(LoadSaveController.user());
             os.flush();
             os.close();

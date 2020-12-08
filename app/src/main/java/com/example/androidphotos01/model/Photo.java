@@ -92,6 +92,10 @@ public class Photo implements Comparable<Photo>, Serializable {
         LoadSaveController.sortedDelete(this.albums,a);
     }
 
+    public int numAlbums(){
+        return this.albums.size();
+    }
+
 
 
     //SEARCHING
