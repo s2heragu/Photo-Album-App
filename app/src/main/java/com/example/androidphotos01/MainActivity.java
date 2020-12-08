@@ -83,6 +83,7 @@ public class MainActivity extends AppCompatActivity {
                 try {
                     String pathToAppFolder = getExternalFilesDir(null).getAbsolutePath();
                     String filePath = pathToAppFolder + File.separator + "user.dat";
+                    LoadSaveController.setPath(filePath);
                     ObjectInputStream in = new ObjectInputStream(new FileInputStream(filePath));
                     User toWrite = (User)in.readObject();
                     LoadSaveController.setUser(toWrite);
@@ -195,8 +196,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onChanged()
             {
-                //LoadSaveController.saveUser(MainActivity.this);
-                MainActivity.this.SaveUser();
+                LoadSaveController.saveUser();
             }
         });
         listView.setOnItemClickListener(
@@ -273,18 +273,6 @@ public class MainActivity extends AppCompatActivity {
         startActivity(intent);
 
     }
-
-    public void onDestroy(){
-        super.onDestroy();
-        SaveUser();
-        System.out.println("MA Destroy");
-    }
-
-    /*public void onStop(){
-        super.onStop();
-        LoadSaveController.saveUser(this);
-        System.out.println("MA Stop");
-    }*/
 
     private AlertDialog.Builder albumName(int position, String title, boolean add){
         AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
@@ -371,20 +359,6 @@ public class MainActivity extends AppCompatActivity {
             }
         });
         return builder;
-    }
-
-    private void SaveUser(){
-        try {
-
-            BufferedOutputStream bos = new BufferedOutputStream(new FileOutputStream(LoadSaveController.path()));
-            ObjectOutputStream os = new ObjectOutputStream(bos);
-            os.writeObject(LoadSaveController.user());
-            os.flush();
-            os.close();
-        }
-        catch (Exception e) {
-            System.out.println("OOOOOOOOOOOOOOOOF");
-        }
     }
 
     @Override

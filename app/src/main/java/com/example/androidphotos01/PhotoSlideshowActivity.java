@@ -106,30 +106,10 @@ public class PhotoSlideshowActivity extends AppCompatActivity {
     //Sets photo and its tags
     private void setImage(Photo p){
 
-        SaveUser();
-
         //Retrieve activity's constraint layout
         ConstraintLayout cL = (ConstraintLayout)findViewById(R.id.slideLayout);
         String name = p.fileName().substring(p.fileName().lastIndexOf(File.separator)+1);
         this.albumNameLabel.setText(name);
-
-        //Using viewTreeObserver to know when layout is generated: avoids NullPointer
-        /*ViewTreeObserver vto = cL.getViewTreeObserver();
-        vto.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
-            @Override
-            public void onGlobalLayout() {
-                cL.getViewTreeObserver().removeGlobalOnLayoutListener(this);
-                //Need to specify photoDisplay width
-                int width  = PhotoSlideshowActivity.this.photoDisplay.getMeasuredWidth();
-                int height = PhotoSlideshowActivity.this.photoDisplay.getMeasuredWidth();
-                try {
-                    PhotoSlideshowActivity.this.photoDisplay.setImageBitmap(PhotoSlideshowActivity.this.getContentResolver().loadThumbnail(Uri.parse(p.fileDir()),new Size(width,height),null));
-                } catch (IOException e) {
-                    System.out.println("oops, i did it again");
-                    e.printStackTrace();
-                }
-            }
-        });*/
 
         String fileString = p.fileDir();
         Uri uri = Uri.parse(fileString);
@@ -146,7 +126,7 @@ public class PhotoSlideshowActivity extends AppCompatActivity {
             @Override
             public void onChanged()
             {
-                PhotoSlideshowActivity.this.SaveUser();
+                LoadSaveController.saveUser();
             }
         });
     }
@@ -314,30 +294,4 @@ public class PhotoSlideshowActivity extends AppCompatActivity {
         startActivityForResult(intent, 0);
         return true;
     }
-
-    private void SaveUser(){
-        try {
-
-            BufferedOutputStream bos = new BufferedOutputStream(new FileOutputStream(LoadSaveController.path()));
-            ObjectOutputStream os = new ObjectOutputStream(bos);
-            os.writeObject(LoadSaveController.user());
-            os.flush();
-            os.close();
-        }
-        catch (Exception e) {
-            System.out.println("OOOOOOOOOOOOOOOOF");
-        }
-    }
-
-    /*public void onDestroy(){
-        super.onDestroy();
-        LoadSaveController.saveUser(this);
-        System.out.println("PS Destroy");
-    }
-
-    public void onStop(){
-        super.onStop();
-        LoadSaveController.saveUser(this);
-        System.out.println("PS Stop");
-    }*/
 }

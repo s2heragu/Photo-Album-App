@@ -74,31 +74,5 @@ public class SearchedPhotosActivity extends AppCompatActivity {
         startActivityForResult(intent, 0);
         return true;
     }
-
-    private void SaveUser(){
-        try {
-
-            BufferedOutputStream bos = new BufferedOutputStream(new FileOutputStream(LoadSaveController.path()));
-            ObjectOutputStream os = new ObjectOutputStream(bos);
-            os.writeObject(LoadSaveController.user());
-            os.flush();
-            os.close();
-        }
-        catch (Exception e) {
-            System.out.println("OOOOOOOOOOOOOOOOF");
-        }
-    }
-
-    /*public void onDestroy(){
-        super.onDestroy();
-        LoadSaveController.saveUser(this);
-        System.out.println("SP Destroy");
-    }
-
-    public void onStop(){
-        super.onStop();
-        LoadSaveController.saveUser(this);
-        System.out.println("SP Stop");
-    }*/
 }
 

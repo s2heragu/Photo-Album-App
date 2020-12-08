@@ -87,8 +87,7 @@ public class PhotoListScreenActivity extends AppCompatActivity {
             @Override
             public void onChanged()
             {
-                //LoadSaveController.saveUser(MainActivity.this);
-                PhotoListScreenActivity.this.SaveUser();
+                LoadSaveController.saveUser();
             }
         });
 
@@ -230,7 +229,7 @@ public class PhotoListScreenActivity extends AppCompatActivity {
             Photo p = this.album.get(Int);
             ((BaseAdapter) photoGridView.getAdapter()).notifyDataSetChanged();
             if(p.numAlbums()>1){
-              SaveUser();
+                LoadSaveController.saveUser();
             }
             else{
                 //Initializing file for scanning
@@ -250,27 +249,12 @@ public class PhotoListScreenActivity extends AppCompatActivity {
 
                                 //Updating desired uri for photo: uri remains constant so that we don't need to scan for this photo again
                                 newPhoto.setFileDir(content);
-                                PhotoListScreenActivity.this.SaveUser();
+                                LoadSaveController.saveUser();
 
                             }
                         });
             }
-
-            //Wait for the MediaScannerConnection thread to finish running
-            /*Handler handler = new Handler(Looper.getMainLooper());
-            handler.postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    //Reset the photoGridView adapter for simplicity
-                    PhotoListScreenActivity.this.SaveUser();
-                }
-            }, 500);*/
         }
-    }
-
-
-    private void hardReset(){
-        PhotoListScreenActivity.this.SaveUser();
     }
 
     public boolean onOptionsItemSelected(MenuItem item){
@@ -279,29 +263,4 @@ public class PhotoListScreenActivity extends AppCompatActivity {
         return true;
     }
 
-    private void SaveUser(){
-        try {
-
-            BufferedOutputStream bos = new BufferedOutputStream(new FileOutputStream(LoadSaveController.path()));
-            ObjectOutputStream os = new ObjectOutputStream(bos);
-            os.writeObject(LoadSaveController.user());
-            os.flush();
-            os.close();
-        }
-        catch (Exception e) {
-            System.out.println("OOOOOOOOOOOOOOOOF");
-        }
-    }
-
-    /*public void onStop(){
-        super.onStop();
-        LoadSaveController.saveUser(this);
-        System.out.println("PLS Stop");
-    }
-
-    public void onDestroy(){
-        super.onDestroy();
-        LoadSaveController.saveUser(this);
-        System.out.println("PLS Destroy");
-    }*/
 }
