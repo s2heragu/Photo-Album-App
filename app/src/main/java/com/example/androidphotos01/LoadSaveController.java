@@ -35,7 +35,7 @@ import java.util.UUID;
 //Class for serializing
 public class LoadSaveController {
     //file path serialize to
-    public static final String filePath = "/storage/emulated/0/Android/data/com/example/androidphotos01/user.dat";
+    private static boolean b = false;
 
     private static User user = new User();
 
@@ -47,6 +47,14 @@ public class LoadSaveController {
 
     public static void setUser(User User){
         user = User;
+    }
+
+    public static boolean started(){
+        return b;
+    }
+
+    public static void start(){
+        b = true;
     }
 
     public static void saveUser(Activity mainActivity){
@@ -99,7 +107,7 @@ public class LoadSaveController {
     }
 
     //Checks if user.dat is empty
-    public static boolean isFileEmpty(Activity activity){
+    public static void isFileEmpty(Activity activity){
 
 
         try {
@@ -107,10 +115,10 @@ public class LoadSaveController {
             BufferedReader br = new BufferedReader(new FileReader(file));
             try {
                 if(br.readLine() == null){
-                    return true;
+
                 }
                 else{
-                    return false;
+                    b = true;
                 }
             } catch (IOException e) {
                 e.printStackTrace();
@@ -118,15 +126,14 @@ public class LoadSaveController {
         } catch (FileNotFoundException e) {
             //e.printStackTrace();
         }
-        return false;
     }
     //Deserialize user to get list of albums
     public static void getUser(Activity activity){
         try {
             //Just use the new user already implemented
-            if(isFileEmpty(activity)){
+            /*if(isFileEmpty(activity)){
                 return;
-            }
+            }*/
             File file = new File(activity.getFilesDir(), "user.dat");
             ObjectInputStream ois = new ObjectInputStream(new FileInputStream(file));
             try {
