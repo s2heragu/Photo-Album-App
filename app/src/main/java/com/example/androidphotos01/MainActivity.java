@@ -77,13 +77,14 @@ public class MainActivity extends AppCompatActivity {
             ActivityCompat.requestPermissions(this, new String[] {android.Manifest.permission.READ_EXTERNAL_STORAGE}, 100);
         }
 
+        String pathToAppFolder = getExternalFilesDir(null).getAbsolutePath();
+        String filePath = pathToAppFolder + File.separator + "user.dat";
+        LoadSaveController.setPath(filePath);
+
         if(!LoadSaveController.started()){
             LoadSaveController.isFileEmpty(this);
             if(!LoadSaveController.started()){
                 try {
-                    String pathToAppFolder = getExternalFilesDir(null).getAbsolutePath();
-                    String filePath = pathToAppFolder + File.separator + "user.dat";
-                    LoadSaveController.setPath(filePath);
                     ObjectInputStream in = new ObjectInputStream(new FileInputStream(filePath));
                     User toWrite = (User)in.readObject();
                     LoadSaveController.setUser(toWrite);
