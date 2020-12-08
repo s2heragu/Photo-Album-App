@@ -49,6 +49,17 @@ public class User implements Serializable {
     public ArrayList<Photo> searchedPhotos() {return this.searched;}
 
 
+    //PHOTO MOVE
+    public int movePhotoToAlbum(int photoIndex, Album previous, Album current){
+        Photo p = previous.get(photoIndex);
+        int toReturn = addPhoto(p,current);
+        if(toReturn != -1){
+            deletePhoto(photoIndex,previous);
+        }
+        return toReturn;
+    }
+
+
     //PHOTO SEARCHER
 
     //Returns photos from a tag search

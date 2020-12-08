@@ -77,7 +77,6 @@ public class PhotoSlideshowActivity extends AppCompatActivity {
         if(albumIndex == -1){
             this.foundPhotos = user.searchedPhotos();
             this.album = null;
-            this.albumNameLabel.setText("Search Results");
         }
         //Photos come from album
         else{
@@ -86,7 +85,6 @@ public class PhotoSlideshowActivity extends AppCompatActivity {
 
         Photo currPhoto = null;
         if(this.album != null){
-            this.albumNameLabel.setText(album.name());
             //Set photo image
             currPhoto = album.photos().get(selectedPhotoIndex);
         }
@@ -112,6 +110,8 @@ public class PhotoSlideshowActivity extends AppCompatActivity {
 
         //Retrieve activity's constraint layout
         ConstraintLayout cL = (ConstraintLayout)findViewById(R.id.slideLayout);
+        String name = p.fileName().substring(p.fileName().lastIndexOf(File.separator)+1);
+        this.albumNameLabel.setText(name);
 
         //Using viewTreeObserver to know when layout is generated: avoids NullPointer
         /*ViewTreeObserver vto = cL.getViewTreeObserver();
