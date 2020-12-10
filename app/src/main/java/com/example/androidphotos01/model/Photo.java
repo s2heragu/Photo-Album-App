@@ -153,9 +153,9 @@ public class Photo implements Comparable<Photo>, Serializable {
     private boolean containsTagCompletion(Tag t){
         ArrayList<Tag>retrieved = this.tags.get(t.name());
         if(retrieved != null){
-            String ts = t.value().toLowerCase();
+            String ts = t.value();
             for(Tag t1: retrieved){
-                String t1s = t1.value().toLowerCase();
+                String t1s = t1.value();
                 if(t1s.startsWith(ts)){
                     return true;
                 }
