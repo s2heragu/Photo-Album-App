@@ -6,6 +6,8 @@ import android.os.Bundle;
 
 import androidx.fragment.app.DialogFragment;
 
+//By Shreyas Heragu and Jonathan Wong
+
 //Class to display any error dialog
 public class ErrorDialogFragment extends DialogFragment {
     public static final String MESSAGE_KEY = "message_key";

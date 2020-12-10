@@ -14,6 +14,7 @@ import java.util.HashMap;
 import java.util.Map.Entry;
 import java.util.TreeMap;
 
+//By Shreyas Heragu and Jonathan Wong
 
 public class Photo implements Comparable<Photo>, Serializable {
 

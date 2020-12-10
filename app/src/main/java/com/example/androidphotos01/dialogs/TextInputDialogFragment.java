@@ -11,6 +11,8 @@ import android.widget.EditText;
 
 import androidx.fragment.app.DialogFragment;
 
+//By Shreyas Heragu and Jonathan Wong
+
 //Class for single text input dialog
 public class TextInputDialogFragment extends DialogFragment {
     public static final String MESSAGE_KEY = "message_key";

@@ -46,6 +46,8 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 
+//By Shreyas Heragu and Jonathan Wong
+
 //ALBUM LIST SCREEN
 public class MainActivity extends AppCompatActivity {
 

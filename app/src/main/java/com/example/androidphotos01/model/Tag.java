@@ -2,6 +2,8 @@ package com.example.androidphotos01.model;
 
 import java.io.Serializable;
 
+//By Shreyas Heragu and Jonathan Wong
+
 public class Tag implements Comparable<Tag>, Serializable {
 
     private String name;    //name of tag

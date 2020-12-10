@@ -4,6 +4,8 @@ import com.example.androidphotos01.LoadSaveController;
 import java.io.Serializable;
 import java.util.ArrayList;
 
+//By Shreyas Heragu and Jonathan Wong
+
 public class Album implements Comparable<Album>, Serializable {
 
     private String name;

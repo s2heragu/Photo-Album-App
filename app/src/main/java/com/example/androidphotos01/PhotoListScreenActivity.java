@@ -49,6 +49,8 @@ import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
+//By Shreyas Heragu and Jonathan Wong
+
 public class PhotoListScreenActivity extends AppCompatActivity {
 
     private GridView photoGridView;
@@ -94,6 +96,8 @@ public class PhotoListScreenActivity extends AppCompatActivity {
         photoGridView.setOnItemClickListener(
                 (AdapterView<?> parent, View view, int position, long id) -> {
                     System.out.println("selected photo: " + position);
+                    Photo p = PhotoListScreenActivity.this.album.get(position);
+                    String name = p.fileName().substring(p.fileName().lastIndexOf(File.separator)+1);
                     AlertDialog.Builder builder = new AlertDialog.Builder(this);
                     builder.setTitle("Choose Action");
 
@@ -112,14 +116,14 @@ public class PhotoListScreenActivity extends AppCompatActivity {
                                         case 1:
                                             //Move to other album
                                             AlertDialog.Builder popup = new AlertDialog.Builder(PhotoListScreenActivity.this);
-                                            popup.setTitle("Select album to move photo to");
+                                            popup.setTitle("Select album to move photo '" + name + "' to:");
                                             OtherAlbumAdapter adapterAlbum = new OtherAlbumAdapter(
                                                     getApplicationContext(),
                                                     R.layout.simple_album_list,
                                                     PhotoListScreenActivity.this.user.albums(),
                                                     PhotoListScreenActivity.this.user
                                             );
-                                            popup.setNegativeButton("cancel", new DialogInterface.OnClickListener() {
+                                            popup.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
                                                 @Override
                                                 public void onClick(DialogInterface someDialog, int www) {
                                                     someDialog.dismiss();
@@ -134,12 +138,17 @@ public class PhotoListScreenActivity extends AppCompatActivity {
                                                             PhotoListScreenActivity.this.album, selectedAlbum) == -1){
                                                         //Show error
                                                         Bundle someBundle = new Bundle();
-                                                        someBundle.putString(ErrorDialogFragment.MESSAGE_KEY,"Photo already exists in album - " + selectedAlbum.name());
+                                                        someBundle.putString(ErrorDialogFragment.MESSAGE_KEY,"Photo '"+name+"' already exists in album  '" + selectedAlbum.name() + "'.");
                                                         DialogFragment someFragment = new ErrorDialogFragment();
                                                         someFragment.setArguments(someBundle);
                                                         someFragment.show(getSupportFragmentManager(), "asdf");
                                                         return;
                                                     }
+                                                    Bundle bundle = new Bundle();
+                                                    bundle.putString(ErrorDialogFragment.MESSAGE_KEY,"Photo '"+name+"' successfully moved to album '" + selectedAlbum.name()+"'.");
+                                                    DialogFragment fragment = new ErrorDialogFragment();
+                                                    fragment.setArguments(bundle);
+                                                    fragment.show(getSupportFragmentManager(), "asdf");
                                                     ((BaseAdapter) photoGridView.getAdapter()).notifyDataSetChanged();
                                                 }
                                             });
@@ -161,7 +170,7 @@ public class PhotoListScreenActivity extends AppCompatActivity {
                                             //DELETE
                                             AlertDialog.Builder deleteDialog = new AlertDialog.Builder(PhotoListScreenActivity.this);
                                             deleteDialog.setTitle("Confirm Delete");
-                                            deleteDialog.setMessage("Are you sure you want to delete photo?");
+                                            deleteDialog.setMessage("Are you sure you want to delete photo '"+name+"'?");
                                             deleteDialog.setPositiveButton("YES", (d, i) -> {
                                                 //Perform actual delete here
                                                 user.deletePhoto(position, PhotoListScreenActivity.this.album);
@@ -215,11 +224,12 @@ public class PhotoListScreenActivity extends AppCompatActivity {
 
             //Testing if we can add the photo: We do not need uri for this
             Photo newPhoto = new Photo(filePath, photoUri.toString());
+            String name = newPhoto.fileName().substring(newPhoto.fileName().lastIndexOf(File.separator)+1);
             int Int = this.user.addPhoto(newPhoto, album);
             //Cannot add album, file chooser ends
             if(Int == -1){
                 Bundle bundle = new Bundle();
-                bundle.putString(ErrorDialogFragment.MESSAGE_KEY,"Photo already exists in this album.");
+                bundle.putString(ErrorDialogFragment.MESSAGE_KEY,"Photo '"+name+"' already exists in this album.");
                 DialogFragment fragment = new ErrorDialogFragment();
                 fragment.setArguments(bundle);
                 fragment.show(getSupportFragmentManager(), "asdf");

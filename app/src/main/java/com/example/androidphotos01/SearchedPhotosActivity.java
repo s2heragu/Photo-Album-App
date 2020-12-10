@@ -32,6 +32,8 @@ import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.List;
+
+//By Shreyas Heragu and Jonathan Wong
 public class SearchedPhotosActivity extends AppCompatActivity {
 
     private GridView photoGridView;

@@ -36,7 +36,7 @@ import java.util.List;
 
 import static androidx.core.content.FileProvider.getUriForFile;
 
-
+//By Shreyas Heragu and Jonathan Wong
 public class PhotoAdapter extends ArrayAdapter<Photo> {
     private Context mContext;
     private Album album;

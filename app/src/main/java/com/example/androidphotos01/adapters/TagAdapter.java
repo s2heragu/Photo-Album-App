@@ -16,6 +16,7 @@ import com.example.androidphotos01.model.Album;
 
 import java.util.List;
 
+//By Shreyas Heragu and Jonathan Wong
 public class TagAdapter extends ArrayAdapter<Tag> {
 
     private int resource;
@@ -51,11 +52,11 @@ public class TagAdapter extends ArrayAdapter<Tag> {
 
 
         if (t != null) {
-            TextView tt1 = (TextView) view.findViewById(R.id.album_name);
+            TextView tagName = (TextView) view.findViewById(R.id.album_name);
             ImageView del = (ImageView) view.findViewById(R.id.image_delete);
 
-            if (tt1 != null) {
-                tt1.setText(t.toString());
+            if (tagName != null) {
+                tagName.setText(t.toString());
             }
 
             if(del != null){

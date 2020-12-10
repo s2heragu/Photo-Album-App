@@ -15,6 +15,7 @@ import com.example.androidphotos01.LoadSaveController;
 
 import java.util.List;
 
+//By Shreyas Heragu and Jonathan Wong
 public class RealAlbumAdapter extends ArrayAdapter<Album> {
 
     private int resource;
@@ -47,11 +48,11 @@ public class RealAlbumAdapter extends ArrayAdapter<Album> {
         Album a = (Album) getItem(position);
 
         if (a != null) {
-            TextView tt1 = (TextView) v.findViewById(R.id.album_name);
+            TextView albumName = (TextView) v.findViewById(R.id.album_name);
             ImageView del = (ImageView) v.findViewById(R.id.image_delete);
 
-            if (tt1 != null) {
-                tt1.setText(a.toString());
+            if (albumName != null) {
+                albumName.setText(a.toString());
             }
 
             if(del != null){

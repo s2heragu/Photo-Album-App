@@ -45,6 +45,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.io.File;
 
+//By Shreyas Heragu and Jonathan Wong
+
 public class PhotoSlideshowActivity extends AppCompatActivity {
 
     private User user;

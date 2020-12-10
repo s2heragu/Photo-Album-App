@@ -4,6 +4,8 @@ import com.example.androidphotos01.LoadSaveController;
 import java.io.Serializable;
 import java.util.ArrayList;
 
+//By Shreyas Heragu and Jonathan Wong
+
 public class User implements Serializable {
 
     private ArrayList<Album>albums; //List of albums
