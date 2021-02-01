@@ -66,31 +66,22 @@ public class PhotoAdapter extends ArrayAdapter<Photo> {
             v = vi.inflate(resourceLayout, null);
         }
 
-        //Getting photo and thumbnail references
-        ImageView thumb = v.findViewById(R.id.thumbnail);
-        //Photo p = (Photo) getItem(position);
-
         //Retrieve view's relativeLayout
-        RelativeLayout rL = (RelativeLayout)v.findViewById(R.id.imgLayout);
         String state = Environment.getExternalStorageState();
         if(Environment.MEDIA_MOUNTED.equals(state)){
             if(checkPermission()){
                 //get photo
                 Photo p = (Photo) getItem(position);
                 String fileString = p.fileDir();
-
-
-
                 Uri uri = Uri.parse(fileString);
                 Bitmap bitmapImage = this.loadFromUri(uri);
                 ImageView thumbnail = null;
 
                 System.out.println("adding photo printing URI STrING");
                 System.out.println("THE GRIDVIEW URI STRING: " + uri.toString());
-
                 System.out.println("trying to get view");
 
-
+                //Found bitmap
                 if(bitmapImage != null){
                     System.out.println("got bit map image");
                     thumbnail = (ImageView) v.findViewById(R.id.thumbnail);
@@ -102,24 +93,6 @@ public class PhotoAdapter extends ArrayAdapter<Photo> {
                 }
             }
         }
-
-        //Using viewTreeObserver to know when layout is generated: avoids NullPointer
-        /*ViewTreeObserver vto = rL.getViewTreeObserver();
-        vto.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
-            @Override
-            public void onGlobalLayout() {
-                rL.getViewTreeObserver().removeGlobalOnLayoutListener(this);
-                int width  = rL.getMeasuredWidth();
-                int height = rL.getMeasuredHeight();
-                try {
-                    //Note that thumbnail is as big as relative layout.
-                    thumb.setImageBitmap(mContext.getContentResolver().loadThumbnail(Uri.parse(p.fileDir()),new Size(width,height),null));
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-
-            }
-        });*/
 
         return v;
     }
